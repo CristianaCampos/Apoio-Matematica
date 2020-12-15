@@ -1,0 +1,234 @@
+<html>
+    <head>
+        <title>Modelo Binomial</title>
+
+        <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        
+        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    
+        <script src="falar.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="../index.css?v=1.0">
+    </head>
+    <body onload="calcular()">
+        <script>
+            function muda()
+            {
+                document.getElementById("play").style.opacity = "0.5";
+            }
+            function muda2()
+            {
+                document.getElementById("play").style.opacity = "1";
+            }
+        </script>
+        <div id="question"></div>
+    
+        <ul id="resultados"></ul>
+
+        <a onmouseover='muda()' onmouseleave='muda2()' onclick='responsiveVoice.setDefaultVoice("Portuguese Male");responsiveVoice.speak(speak(vezes, nrFace, resultados[0], resultados[1], resultados[2], resultados[3]));'><img id="play" style='width:40px; height:auto;' src='play.png'/></a>
+
+        <p>
+            <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">Primeira Ajuda</button>
+            <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Segunda Ajuda</button>
+            <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample3">Terceira Ajuda</button>
+        </p>
+        <div class="row">
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample1">
+                    <div class="card card-body">
+                        <b>Ajuda 1</b>
+                        <p>Como a experiência se repete várias vezes, de forma independente, a distribuição de probabilidades segue o <b>Modelo Binomial</b>.</p>
+                        <p>P(X=k) = <sup>n</sup>C<sub>k</sub> x p<sup>k</sup> x q<sup>n-k</sup></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample2">
+                    <div class="card card-body">
+                        <b>Ajuda 2</b>
+                        <p>Neste caso, temos que:</p>
+                        <ul>
+                            <li>n = 10 --> A experiência repete-se 10 vezes</li>
+                            <li id="p"></li>
+                            <li>q = 3<sub>/4</sub> --> A probabilidade do insucesso pode ser calculada como q = 1 - 1<sub>/4</sub> = 3<sub>/4</sub></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample3">
+                    <div class="card card-body">
+                        <b>Ajuda 3</b>
+                        <p id="ajuda3"></p>
+                        <p id="ajuda3Calculo"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var vezes;
+            var nrFace;
+            var result;
+            var resultados = []; 
+
+            function criaOpcoes(tipo, num, dif)
+		    {               
+                if (tipo == "num")
+                {                 
+                    num = parseFloat(num.toFixed(3));                                                
+                    resultados = [num];
+                    
+                    while (resultados.length < 4) 
+                    {
+                        result = parseFloat(Math.random().toFixed(3));                                                
+                        inserir(result, resultados);
+                    }
+                    
+                    resultados.sort();	
+                    
+                    for (i=0; i<4; i++)
+                    {	
+                        if (resultados[i] == num)
+                            certa = i;				
+                    }
+                                        
+                    result = "<ul id='resultados'>";
+                    result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op1'><label id='l1'><b> (A) </b>" + resultados[0] + " </label></li>";
+                    result += " <li><input type='radio' onchange='verificar_nothidden();' name='op' id='op2'><label id='l2'><b> (B) </b>" + resultados[1] + " </label></li>";
+                    result += " <li><input type='radio' onchange='verificar_nothidden();' name='op' id='op3'><label id='l3'><b> (C) </b>" + resultados[2] + " </label></li>";
+                    result += " <li><input type='radio' onchange='verificar_nothidden();' name='op' id='op4'><label id='l4'><b> (D) </b>" + resultados[3] + " </label></li>";		
+                    result += " <li><a id='hidden' hidden onclick='verificar()'><img id='check' style='width:40px; height:auto;' src='check.png'/></a></li></ul>";
+                
+                    document.getElementById("resultados").innerHTML = result;
+                }	
+                return result;
+            }
+		
+            function verificar() 
+            {			
+                document.getElementById("op1").disabled = true;
+                document.getElementById("op2").disabled = true;
+                document.getElementById("op3").disabled = true;
+                document.getElementById("op4").disabled = true;
+
+                if ((document.getElementById("op1").checked == true) && (certa == 0)) 
+                    document.getElementById("l1").style.color = "green";
+                    
+                else if ((document.getElementById("op2").checked == true) && (certa == 1)) 
+                    document.getElementById("l2").style.color = "green";
+                    
+                else if ((document.getElementById("op3").checked == true) && (certa == 2)) 
+                    document.getElementById("l3").style.color = "green";
+                    
+                else if ((document.getElementById("op4").checked == true) && (certa == 3)) 
+                    document.getElementById("l4").style.color = "green";
+                    
+                else
+                {
+                    var radios = document.getElementsByName("op");
+                    var escolhido;
+                    
+                    for (i=0; i< radios.length;i++)
+                    {
+                        if (radios[i].checked)
+                            escolhido = i;
+                    }
+                    
+                    if (escolhido == 0)		
+                        document.getElementById("l1").style.color = "red";
+                    else if (escolhido == 1)
+                        document.getElementById("l2").style.color = "red";
+                    else if (escolhido == 2)
+                        document.getElementById("l3").style.color = "red";
+                    else if (escolhido == 3)
+                        document.getElementById("l4").style.color = "red";
+                    
+                    if (certa == 0)  
+                        document.getElementById("l1").style.color = "green";
+                    else if (certa == 1) 
+                        document.getElementById("l2").style.color = "green"; 
+                    else if (certa == 2)
+                        document.getElementById("l3").style.color = "green"; 
+                    else if (certa == 3) 
+                        document.getElementById("l4").style.color = "green";				 					 
+                    
+                }
+            }
+	
+            function verificar_nothidden()
+            {
+                document.getElementById("hidden").hidden = false;
+            }
+		
+            function inserir(n,v)
+            {
+                var pos = 0;
+                var encontrou = false;
+                
+                while (pos < v.length && !encontrou)
+                {
+                    if (v[pos] == n)
+                        encontrou = true;
+            
+                    pos++;				
+                }
+                
+                if (!encontrou)
+                    v[v.length] = n;
+
+                return v;			
+            }
+
+            function randomNeM(n, m)
+            {
+                return Math.floor(Math.random() * (m-n+1))+(n);
+            }
+
+            function calcular()
+            {
+                vezes = randomNeM(1,7);
+                nrFace = randomNeM(1,4);
+
+                var n = 10;
+                var p = 1/4;
+                var q = 3/4;
+                
+                var nFatorial = 1;
+                for (var i= n; i>0; i--)
+                    nFatorial = nFatorial * i;
+
+                var pFatorial = 1;
+                for (var i= vezes; i>0; i--)
+                    pFatorial = pFatorial * i;
+
+                var nMenosp = 10 - vezes;
+
+                var nMenospFatorial = 1;
+                for (var i = nMenosp; i>0; i--)
+                    nMenospFatorial = nMenospFatorial * i;
+
+                var total = (nFatorial / (nMenospFatorial * pFatorial)) * Math.pow(p, vezes) * Math.pow(q, nMenosp);
+                var opcoes = criaOpcoes("num", total, 0.005);	
+                document.getElementById("question").innerHTML = "Dado um tetraédrico equilibrado, com as faces numeradas de 1 a 4, lança-se dez vezes esse dado e, em cada lançamento, regista-se o número da face que fica voltada para baixo. Qual é a probabilidade, arredondada às milésimas, de sair exatamente " + vezes + " vezes a face com o número " + nrFace + "?"
+                document.getElementById("p").innerHTML = "p = 1<sub>/4</sub> --> A probabilidade do sucesso, ou seja, 'Sair face com o numero " + nrFace + "', porque o dado tem quatro faces e apenas uma delas tem o número " + nrFace + "."; 
+                document.getElementById("ajuda3").innerHTML = "Assim, calculando a probabilidade de sair face com o número " + nrFace + " exatamente " + vezes + " vezes, temos:";
+                document.getElementById("ajuda3Calculo").innerHTML = "P(X=" + vezes + ") = <sup>10</sup>C<sub>" + vezes + "</sub> x (1<sub>/4</sub>)<sup>"+vezes+"</sup> x (3<sub>/4</sub>)<sup>"+nMenosp+"</sup>";
+            }
+        </script>
+
+        <!-- <input type="button" onclick="showPap()"> -->
+		
+		<script>
+			function showPap()
+			{     
+				console.log(parent.paptest += 1);
+			}
+		</script>
+    </body>
+</html>

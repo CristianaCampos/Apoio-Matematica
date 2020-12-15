@@ -1,0 +1,188 @@
+﻿
+<html>
+<head>
+	<title>Manual de Apoio</title>
+	<link rel="icon" href="logo_icon.png">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	
+	<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" href="manualApoio.css?v=1.7">
+</head>
+
+<body id="page-top" onload="background();">
+	<div class="container">
+		<nav class="navbar justify-content-end fixed-top navbar-expand-sm navbar-light" id="mainNav" style="background-color:transparent;">
+			<ul class="nav navbar-nav">
+				<li class="nav-item"><a class="nav-link" href="#page-top"><img width="120px" src="logo_site.png"/></a></li>
+				<li class="nav-item"><a class="nav-link" href="#sobre"><b>Sobre</b></a></li>
+				<li class="nav-item"><a class="nav-link" href="#quemsomos"><b>Quem Somos</b></a></li>
+				<li class="nav-item"><a class="nav-link" href="#contactos"><b>Contactos</b></a></li>
+				<li class="nav-item"><a class="nav-link" style="font-family: Lobster" href="../Design/index/index_html.php" target="_blank"><b>A nossa PAP</b></a></li>
+			</ul>
+		</nav>		
+	</div>
+
+	<canvas id="myCanvas"></canvas>
+	<script>	
+		function background()
+		{
+			document.body.style.background = 'url(' + c.toDataURL() + ')';
+			document.body.style.backgroundRepeat = "no-repeat";
+		}
+	
+		function randomNeM(n, m)
+		{
+			return Math.floor(Math.random() * (m-n+1))+(n);
+		}
+	
+		var windowWidth = 0;
+		var windowHeight = 0;
+	
+		function sizeOfThings(){
+			windowWidth = window.innerWidth;
+			windowHeight = window.innerHeight;
+	 	  
+			console.log(windowWidth + 'x' + windowHeight);
+		};
+
+		sizeOfThings();
+
+		window.addEventListener('resize', function(){
+			sizeOfThings();
+		});
+	
+		//width and height do canvas
+		document.getElementById("myCanvas").width = windowWidth - 20;
+		document.getElementById("myCanvas").height = windowHeight;
+	
+		////// numeros
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		var n = 0; 
+		var x = [];
+		var y = [];
+
+		for (var i=0; i<350; i++)
+		{
+			n = randomNeM(0, 9);
+			x[i] = randomNeM(2, c.width - 20);
+			y[i] = randomNeM(c.height/3, c.height);
+
+			while ((x[i] >= (c.width/4)-30) && (x[i] <= (c.width/4)+710) && (y[i] >= (c.height/7)-20) && (y[i] <= (c.height/7)+350))
+			{
+				x[i] = randomNeM(2, c.width - 20);
+				y[i] = randomNeM(100, c.height); 
+			}
+						
+			var tamanho = randomNeM(20, 30);
+			ctx.font = tamanho + 'pt Arial';
+			var cor = randomNeM(1,3);
+			//1 --> #4682B4
+			//2 --> #26abe0
+			//3 --> #bde6f6
+			if (cor == 1)
+				ctx.fillStyle = '#4682B4'; 
+			if (cor == 2)
+				ctx.fillStyle = '#26abe0'; 
+			if (cor == 3)
+				ctx.fillStyle = '#bde6f6'; 
+			ctx.fillText(n, x[i], y[i]);
+		}
+		
+		////////retângulo com texto
+		
+		ctx.fillStyle = '#4682B4';
+		ctx.fillRect(c.width/4, c.height/7, 700, 300);
+		ctx.font = '24pt Quicksand';
+		ctx.fillStyle = 'white';
+		ctx.fillText("APOIO À MATEMÁTICA", (c.width/4)*1.55, (c.height/7)*2);
+		
+		ctx.moveTo((c.width/4)+36, (c.height/7)+170);
+		ctx.lineTo((c.width/4)+660, (c.height/7)+170);
+		ctx.stroke();
+		
+		ctx.font = '13pt Quicksand';
+		ctx.fillStyle = 'white';
+		ctx.fillText("Prova de Aptidão Profissional - 2018/2019", (c.width/4)+190, (c.height/7)+210);
+	</script>
+
+	<section class="" id="sobre" style="background-color:#4682B4">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 mx-auto text-center">
+					<h2 class="section-heading text-dark titulo">Sobre</h2>
+					<hr>
+					<p class="text-white">Este site é um manual de apoio à nossa Prova de Aptidão Profissional, "Apoio à Matemática".</p>
+					<p class="text-white">O "Apoio à Matemática" é um programa para ajudar toda a gente a estudar Matemática A, com o objetivo de ajudar para os exames nacionais.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<section class="bg-light" id="quemsomos">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 mx-auto text-center">
+					<h2 class="section-heading text-black titulo">Quem Somos Nós</h2>
+					<hr>
+					<p>
+						<img src="esg.png" width="25px"/> Alunos da Escola Secundária de Gondomar
+					</p>
+					<p>
+						<img src="Logo_Curso1.png" width="45px"/>Curso Profissional Técnico de Gestão e Programação de Sistemas Informáticos
+					</p>
+					<br>
+					<p>
+						<img src="eu.jpg" width="50px"/><b> Cristiana Campos</b>
+					</p>
+					<p style="font-size:15px">
+						Nasci em 2000. Sou sociável, empenhada e responsável.
+					</p>
+					<p style="font-size:15px">
+						Gosto de dançar e de programar.
+					</p>
+					<p>
+						<img src="ruben.jpg" width="50px"/><b> Rúben Silva</b>
+					</p>
+					<p style="font-size:15px">
+						Nasci em 2000. Sou divertido, alegre e humilde.
+					</p>
+					<p style="font-size:15px">
+						Gosto de desporto e de programar.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<section class="" id="contactos" style="background-color: #4682B4">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 mx-auto text-center">
+					<h2 class="section-heading text-dark titulo">Contactos</h2>
+					<hr>
+					<p class="text-white"><b>Nós:</b></p>
+					<p class="text-white"><img src="email2.png" width="30px"/> cristiana-campos@hotmail.com</p>
+					<p class="text-white"><img src="email2.png" width="30px"/> rubensilva171@hotmail.com</p>
+					
+					<p class="text-white"><b>Escola:</b></p>
+					<p class="text-white">
+						<img src="localizacao2.png" width="30px"/> Largo Luís de Camões 4420-183 Gondomar (São Cosme)
+					</p>
+					<p class="text-white">
+						<img src="telefone2.png" width="30px"/>Telefone: 22 483 04 08 // 22 463 14 10
+					</p>	
+				</div>
+			</div>
+		</div>
+	</section>
+	
+</body>
+</html>

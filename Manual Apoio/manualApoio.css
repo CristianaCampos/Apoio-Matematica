@@ -1,0 +1,30 @@
+body {
+	height: 100%;
+	font-family: Quicksand;
+	font-size: 18px;
+}
+
+.titulo {
+	font-family: Lobster;	
+}
+
+.text-faded {
+	color: black;
+}
+
+.text-uppercase {
+	color: black;	
+}
+
+section {
+	padding: 8rem 0;
+}
+
+.btn {
+	padding: 0.7rem 1.5rem;
+	border-radius: 200px;
+	font-weight: 700;
+	background-color:#80bfff;
+	color: black;
+	text-transform: uppercase;
+}

@@ -1,0 +1,240 @@
+<html>
+    <head>
+        <title>Sucessões</title>
+
+        <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        
+        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+		
+		<link rel="stylesheet" type="text/css" href="../index.css?v=1.0">
+    </head>
+    <body onload="calcular()">
+        <div id="question">
+        </div>
+
+        <ul id="resultados">
+        </ul>
+        
+        <script>
+            var certa; 
+            function randomNeM(n, m)
+            {
+                return Math.floor(Math.random() * (m-n+1))+(n);
+            }
+
+            function criaOpcoes(tipo, num, dif)
+		    {
+                var result;
+                var resultados = []; 
+                
+                if (tipo == "sucessao")
+                {          
+                    if (num[1] < 0)
+                        result = num[0]+"a "+ num[1];
+                    else
+                        result = num[0]+"a + "+ num[1];
+                    inserir(result, resultados);
+
+                    if (num[1]*(-1)<0)
+                        result = num[0]+"a "+ num[1]*(-1);
+                    else
+                        result = num[0]+"a + "+ num[1]*(-1);
+                    inserir(result, resultados);
+
+                    if (num[1] < 0)
+                        result = (-1)*num[0]+"a "+ num[1];
+                    else
+                        result = (-1)*num[0]+"a + "+ num[1];
+                    inserir(result, resultados);
+
+                    if (num[1]*(-1)<0)
+                        result = (-1)*num[0]+"a "+ num[1]*(-1);
+                    else
+                        result = (-1)*num[0]+"a + "+ num[1]*(-1);
+                    inserir(result, resultados);
+
+                    resultados.sort();	
+
+                    for (i=0; i<4; i++)
+				    {	
+					    if (resultados[i] == num)
+						    certa = i;				
+				    }
+
+                    result = "<ul id='resultados'>";
+                    result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op1'><label id='l1'> <b>(A)</b> " + resultados[0] + "</label></li>";
+                    result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op2'><label id='l2'> <b>(B)</b> " + resultados[1] + "</label></li>";
+                    result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op3'><label id='l3'> <b>(C)</b> " + resultados[2] + "</label></li>";
+                    result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op4'><label id='l4'> <b>(D)</b> " + resultados[3] + "</label></li>";		
+                    result += "<li><a id='hidden' hidden onclick='verificar()'><img id='check' style='width:40px; height:auto;' src='check.png'/></a></li></ul>";
+                
+                    document.getElementById("resultados").innerHTML = result;
+
+                }
+                return result;
+                
+            }
+
+            function verificar_nothidden()
+            {
+                document.getElementById("hidden").hidden = false;
+            }
+            
+            function inserir(n,v)
+            {
+                var pos = 0;
+                var encontrou = false;
+                
+                while (pos < v.length && !encontrou)
+                {
+                    if (v[pos] == n)
+                        encontrou = true;
+            
+                    pos++;				
+                }
+                
+                if (!encontrou)
+                    v[v.length] = n;
+                    
+                return v;			
+            }
+
+            function verificar() 
+            {			
+                document.getElementById("op1").disabled = true;
+                document.getElementById("op2").disabled = true;
+                document.getElementById("op3").disabled = true;
+                document.getElementById("op4").disabled = true;
+
+                if ((document.getElementById("op1").checked == true) && (certa == 0)) 
+                    document.getElementById("l1").style.color = "green";
+                    
+                else if ((document.getElementById("op2").checked == true) && (certa == 1)) 
+                    document.getElementById("l2").style.color = "green";
+                    
+                else if ((document.getElementById("op3").checked == true) && (certa == 2)) 
+                    document.getElementById("l3").style.color = "green";
+                    
+                else if ((document.getElementById("op4").checked == true) && (certa == 3)) 
+                    document.getElementById("l4").style.color = "green";
+                    
+                else
+                {
+                    var radios = document.getElementsByName("op");
+                    var escolhido;
+                    
+                    for (i=0; i< radios.length;i++)
+                    {
+                        if (radios[i].checked)
+                            escolhido = i;
+                    }
+                    
+                    if (escolhido == 0)		
+                        document.getElementById("l1").style.color = "red";
+                    else if (escolhido == 1)
+                        document.getElementById("l2").style.color = "red";
+                    else if (escolhido == 2)
+                        document.getElementById("l3").style.color = "red";
+                    else if (escolhido == 3)
+                        document.getElementById("l4").style.color = "red";
+                    
+                    if (certa == 0)  
+                        document.getElementById("l1").style.color = "green";
+                    else if (certa == 1) 
+                        document.getElementById("l2").style.color = "green"; 
+                    else if (certa == 2)
+                        document.getElementById("l3").style.color = "green"; 
+                    else if (certa == 3) 
+                        document.getElementById("l4").style.color = "green";				 					 
+                    
+                }
+            }           
+
+            function calcular()
+            {
+                var n1 = randomNeM(-4, 4);
+                var n2 = randomNeM(-4, 4);
+                while(n1 == 0 || n1 == 1)
+                    n1 = randomNeM(-4, 4);
+                while(n2 == 0)
+                    n2 = randomNeM(-4, 4);
+                var termo = randomNeM(3, 5);
+                var termo1;
+                var termo2;
+
+                if (termo == 3)
+                {
+                    for (var i=0; i<2; i++)
+                    {
+                        if (i==0)
+                        {
+                            termo1 = n1;
+                            termo2 = n2;
+                        }
+                        else
+                        {
+                            termo1 = (n1 * termo1);
+                            termo2 = (n1 * termo2)+n2;
+                        }
+                    }
+                }
+
+                if (termo == 4)
+                {
+                    for (var i=0; i<3; i++)
+                    {
+                        if (i==0)
+                        {
+                            termo1 = n1;
+                            termo2 = n2;
+                        }
+                        else
+                        {
+                            termo1 = (n1 * termo1);
+                            termo2 = (n1 * termo2)+n2;
+                        }
+                    }
+                }
+
+                if (termo == 5)
+                {
+                    for (var i=0; i<4; i++)
+                    {
+                        if (i==0)
+                        {
+                            termo1 = n1;
+                            termo2 = n2;
+                        }
+                        else
+                        {
+                            termo1 = (n1 * termo1);
+                            termo2 = (n1 * termo2)+n2;
+                        }
+                    }
+                }
+                
+                document.getElementById("question").innerHTML = "<p>Seja <i>a</i> um número real.</p><p>Considere uma sucessão (u<sub>n</sub>) definida por: ";
+
+                if (n2 > 0)
+                    document.getElementById("question").innerHTML += "<table><tr><td rowspan='2'>&#x7b;</td><td><b>u<sub>1</sub> = a</b></td></tr><tr><td><b>u<sub>n+1</sub> = "+n1+"u<sub>n</sub> + "+n2+ "</b>, &#8704;<i>n</i> &#8712; &#8469;</td></tr></table>";
+                else
+                    document.getElementById("question").innerHTML += "<table><tr><td rowspan='2'>&#x7b;</td><td><b>u<sub>1</sub> = a</b></td></tr><tr><td><b>u<sub>n+1</sub> = "+n1+"u<sub>n</sub> "+n2+ "</b>, &#8704;<i>n</i> &#8712; &#8469;</td></tr></table>";
+
+                opcoes = criaOpcoes("sucessao", [termo1, termo2], 100);	
+            }
+        </script>
+        <!-- <input type="button" onclick="showPap()"> -->
+		
+		<script>
+			function showPap()
+			{     
+				console.log(parent.paptest += 1);
+			}
+		</script>
+    </body>
+</html>

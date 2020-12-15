@@ -1,0 +1,178 @@
+<html>
+    <head>
+        <title>Estudo da Elipse</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        
+        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="../index.css?v=1.1">
+    </head>
+    <body onload="resolver();ajudas();">
+        <div id="question">
+        </div>
+    
+        <ul id="resultados">
+        </ul>
+
+        <p>
+            <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">Primeira Ajuda</button>
+            <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Segunda Ajuda</button>
+            <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample3">Terceira Ajuda</button>
+            <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample4" aria-expanded="false" aria-controls="multiCollapseExample4">Quarta Ajuda</button>
+        </p>
+        <div class="row">
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample1">
+                    <div class="card card-body">
+                        <b>Ajuda 1</b>
+                        <p id="ajuda1"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample2">
+                    <div class="card card-body">
+                        <b>Ajuda 2</b>
+                        <p id="ajuda2"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample3">
+                    <div class="card card-body">
+                        <b>Ajuda 3</b>
+                        <p id="ajuda3"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample4">
+                    <div class="card card-body">
+                        <b>Ajuda 4</b>
+                        <p id="ajuda4"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var certa = 1;
+            var a, b, c;
+            var resultados = []; 
+
+            function randomNeM(n, m)
+            {
+                return Math.floor(Math.random() * (m-n+1))+(n);
+            }
+
+            function criaOpcoes(tipo, n1, n2, errado)
+		    {
+                var result;
+                
+                if (tipo == "num")
+                {                                                              
+                    resultados[0] = "x<sup>2</sup><sub>/" + n2 + "</sub> + y<sup>2</sup><sub>/" + n1 + "</sub> = 1";
+                    resultados[1] = "x<sup>2</sup><sub>/" + n1 + "</sub> + y<sup>2</sup><sub>/" + n2 + "</sub> = 1";
+                    resultados[2] = "x<sup>2</sup><sub>/" + n1 + "</sub> + y<sup>2</sup><sub>/" + errado + "</sub> = 1";
+                    resultados[3] = "x<sup>2</sup><sub>/" + errado + "</sub> + y<sup>2</sup><sub>/" + n1 + "</sub> = 1";
+                                        
+                    result = "<ul id='resultados'>";
+                    result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op1'><label id='l1'><b> (A) </b>" + resultados[0] + " </label></li>";
+                    result += " <li><input type='radio' onchange='verificar_nothidden();' name='op' id='op2'><label id='l2'><b> (B) </b>" + resultados[1] + " </label></li>";
+                    result += " <li><input type='radio' onchange='verificar_nothidden();' name='op' id='op3'><label id='l3'><b> (C) </b>" + resultados[2] + " </label></li>";
+                    result += " <li><input type='radio' onchange='verificar_nothidden();' name='op' id='op4'><label id='l4'><b> (D) </b>" + resultados[3] + " </label></li>";		
+                    result += " <li><a id='hidden' hidden onclick='verificar()'><img id='check' style='width:40px; height:auto;' src='check.png'/></a></li></ul>";
+                
+                    document.getElementById("resultados").innerHTML = result;
+                }	
+                return result;
+            }
+		
+            function verificar() 
+            {			
+                document.getElementById("op1").disabled = true;
+                document.getElementById("op2").disabled = true;
+                document.getElementById("op3").disabled = true;
+                document.getElementById("op4").disabled = true;
+
+                if ((document.getElementById("op1").checked == true) && (certa == 0)) 
+                    document.getElementById("l1").style.color = "green";
+                    
+                else if ((document.getElementById("op2").checked == true) && (certa == 1)) 
+                    document.getElementById("l2").style.color = "green";
+                    
+                else if ((document.getElementById("op3").checked == true) && (certa == 2)) 
+                    document.getElementById("l3").style.color = "green";
+                    
+                else if ((document.getElementById("op4").checked == true) && (certa == 3)) 
+                    document.getElementById("l4").style.color = "green";
+                    
+                else
+                {
+                    var radios = document.getElementsByName("op");
+                    var escolhido;
+                    
+                    for (i=0; i< radios.length;i++)
+                    {
+                        if (radios[i].checked)
+                            escolhido = i;
+                    }
+                    
+                    if (escolhido == 0)		
+                        document.getElementById("l1").style.color = "red";
+                    else if (escolhido == 1)
+                        document.getElementById("l2").style.color = "red";
+                    else if (escolhido == 2)
+                        document.getElementById("l3").style.color = "red";
+                    else if (escolhido == 3)
+                        document.getElementById("l4").style.color = "red";
+                    
+                    if (certa == 0)  
+                        document.getElementById("l1").style.color = "green";
+                    else if (certa == 1) 
+                        document.getElementById("l2").style.color = "green"; 
+                    else if (certa == 2)
+                        document.getElementById("l3").style.color = "green"; 
+                    else if (certa == 3) 
+                        document.getElementById("l4").style.color = "green";				 					 
+                    
+                }
+            }
+	
+            function verificar_nothidden()
+            {
+                document.getElementById("hidden").hidden = false;
+            }
+
+            function resolver()
+            {
+                c = randomNeM(4, 6);
+                a = randomNeM(7, 10);
+                b = Math.pow(a,2) - Math.pow(c,2);
+                document.getElementById("question").innerHTML = "Considere, num referencial o.n. xOy, uma elipse centrada na origem do referencial e de focos <i>F<sub>1</sub></i> e <i>F<sub>2</sub></i>, pertencentes ao eixo Ox. <br>Sabe-se que: <ul><li><i>F<sub>1</sub>F<sub>2</sub> = " + c*2 + "</i></li><li>sendo <i>P</i> um ponto qualquer da elipse, tem-se <i>PF<sub>1</sub></i> + <i>PF<sub>2</sub></i> = " + a*2 + "</li></ul>Qual é a equação reduzida desta elipse?";
+                criaOpcoes("num", Math.pow(a,2), b, Math.pow(c,2));
+            }
+
+            function ajudas()
+            {
+                document.getElementById("ajuda1").innerHTML = "Como a <i>F<sub>1</sub>F<sub>2</sub></i> = " + c*2 + ", ou seja, a distância entre os focos é 2c = " + c*2 + ", então a distância dos focos ao centro da elipse é:<br> c = " + c*2 + "/2 = " + c;
+                document.getElementById("ajuda2").innerHTML = "Como a soma das distâncias aos focos de qualquer ponto da elipse é igual ao comprimento do eixo maior (2a), temos que: <br> 2a = " + 2*a + " <=> a = " + 2*a + "/2 <=> a = " + a;
+                document.getElementById("ajuda3").innerHTML = "Assim podemos calcular o comprimento do semi-eixo menor (b), sabendo que a<sup>2</sup> = b<sup>2</sup> + c<sup>2</sup>: <br> a<sup>2</sup> = b<sup>2</sup> + c<sup>2</sup> <=> " + a + "<sup>2</sup> = b<sup>2</sup> + " + c + "<sup>2</sup> <=> " + Math.pow(a,2) + " = b<sup>2</sup> + " + Math.pow(c,2) + " <=> " + Math.pow(a,2) + " - " + Math.pow(c,2) + " = b<sup>2</sup> <=> b<sup>2</sup> = " + (Math.pow(a,2) - Math.pow(c,2));
+                document.getElementById("ajuda4").innerHTML = "Assim, temos que a equação da elipse centrada na origem e com os focos sobre o eixo <i>Ox</i>, é dada por: <br> x<sup>2</sup><sub>/a<sup>2</sup></sub> + y<sup>2</sup><sub>/b<sup>2</sup></sub> = 1, ou seja, nas condições do enunciado, " + resultados[1];
+            }
+        
+        </script>
+        <!-- <input type="button" onclick="showPap()"> -->
+		
+		<script>
+			function showPap()
+			{     
+				console.log(parent.paptest += 1);
+			}
+		</script>
+    </body>
+</html>

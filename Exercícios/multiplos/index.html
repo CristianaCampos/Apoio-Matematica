@@ -1,0 +1,191 @@
+<html>
+<!-- Multiplos de n com 4 algarismos de 1 a 9 -->
+
+<!-- FALTA AJUDAS  -->
+<head>
+	<title> Múltiplos </title>
+
+	<script src="falar.js"></script>
+	<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+	
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../index.css?v=1.0">	
+</head>
+
+<body onload="resolver();">
+	<script>
+		function muda()
+		{
+			document.getElementById("play").style.opacity = "0.5";
+		}
+		function muda2()
+		{
+			document.getElementById("play").style.opacity = "1";
+		}
+	</script>
+
+	<div id="question">
+		<p>Considere todos os números naturais de quatro algarismos que se podem formar com os algarismos de 1 a 9.</p>
+	</div>
+	
+	<ul id="resultados">
+	</ul>
+
+	<a onmouseover='muda()' onmouseleave='muda2()' onclick='responsiveVoice.setDefaultVoice("Portuguese Male");responsiveVoice.speak(speak(multiplode, resultados[0], resultados[1], resultados[2], resultados[3]));'><img id="play" style='width:40px; height:auto;' src='play.png'/></a>
+	
+	<script>
+		var multiplos = 0;
+		var multiplode = randomNeM(3,9);
+		var result;
+		var resultados; 
+
+		function randomNeM(n, m)
+		{
+			return Math.floor(Math.random() * (m-n+1))+(n);
+		}
+	
+		function criaOpcoes(tipo, num, dif)
+		{	
+			if (tipo == "num")
+			{
+				num = num;
+				resultados = [num];
+				
+				while (resultados.length < 4)
+				{
+					result = randomNeM(multiplos-dif, multiplos+dif);
+					inserir(result, resultados);
+				}
+				
+				resultados.sort();
+				// NÃO ORDENA AS VEZES
+								
+				for (i=0; i<4; i++)
+				{	
+					if (resultados[i] == num)
+						certa = i;				
+				}
+									
+				result = "<ul id='resultados'>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op1'><label id='l1'><b> (A) </b>" + resultados[0] + "</label></li>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op2'><label id='l2'><b> (B) </b>" + resultados[1] + "</label></li>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op3'><label id='l3'><b> (C) </b>" + resultados[2] + "</label></li>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op4'><label id='l4'><b> (D) </b>" + resultados[3] + "</label></li>";		
+				result += "<li><a id='hidden' hidden onclick='verificar()'><img id='check' style='width:40px; height:auto;' src='check.png'/></a></li></ul>";
+			
+				document.getElementById("resultados").innerHTML = result;
+			}	
+			return result;
+		}
+		
+		function verificar() 
+		{			
+			document.getElementById("op1").disabled = true;
+			document.getElementById("op2").disabled = true;
+			document.getElementById("op3").disabled = true;
+			document.getElementById("op4").disabled = true;
+
+			if ((document.getElementById("op1").checked == true) && (certa == 0)) 
+				 document.getElementById("l1").style.color = "green";
+				 
+			else if ((document.getElementById("op2").checked == true) && (certa == 1)) 
+				document.getElementById("l2").style.color = "green";
+				
+			else if ((document.getElementById("op3").checked == true) && (certa == 2)) 
+				 document.getElementById("l3").style.color = "green";
+				
+			else if ((document.getElementById("op4").checked == true) && (certa == 3)) 
+				 document.getElementById("l4").style.color = "green";
+				 
+			else
+			{
+				var radios = document.getElementsByName("op");
+				var escolhido;
+				
+				for (i=0; i< radios.length;i++)
+				{
+					if (radios[i].checked)
+						escolhido = i;
+				}
+				
+				if (escolhido == 0)		
+					document.getElementById("l1").style.color = "red";
+				else if (escolhido == 1)
+					document.getElementById("l2").style.color = "red";
+				else if (escolhido == 2)
+					document.getElementById("l3").style.color = "red";
+				else if (escolhido == 3)
+					document.getElementById("l4").style.color = "red";
+				
+				if (certa == 0)  
+					document.getElementById("l1").style.color = "green";
+				else if (certa == 1) 
+					document.getElementById("l2").style.color = "green"; 
+				else if (certa == 2)
+					document.getElementById("l3").style.color = "green"; 
+				else if (certa == 3) 
+					document.getElementById("l4").style.color = "green";				 					 
+				
+			}
+		}
+	
+		function verificar_nothidden()
+		{
+			document.getElementById("hidden").hidden = false;
+		}
+		
+		function inserir(n,v)
+		{
+			var pos = 0;
+			var encontrou = false;
+			
+			while (pos < v.length && !encontrou)
+			{
+				if (v[pos] == n)
+					encontrou = true;
+		
+				pos++;				
+			}
+			
+			if (!encontrou)
+				v[v.length] = n;
+				
+			return v;			
+		}
+		
+		function resolver()
+		{	
+			
+			for (i=1000;i<=9999;i++)
+			{
+				var str = i + "";
+				
+				var n1 = str.substring(0,1);
+				var n2 = str.substring(1,2);
+				var n3 = str.substring(2,3);
+				var n4 = str.substring(3,4);	
+
+				if ((n1 == 0) || (n2 == 0) || (n3 == 0) || (n4 == 0))
+				{}
+				else
+				{
+					if (i % multiplode == 0)
+						multiplos += 1;
+				}						
+			}
+			
+			document.getElementById("question").innerHTML += "<p>Destes números, quantos são múltiplos de " + multiplode + "?</p>" ;
+			opcoes = criaOpcoes("num", multiplos, 100);	
+		}
+	</script>
+
+	<!-- <input type="button" onclick="showPap()"> -->
+	
+	<script>
+			function showPap()
+			{     
+				console.log(parent.paptest += 1);
+			}
+		</script>
+</body>
+</html>

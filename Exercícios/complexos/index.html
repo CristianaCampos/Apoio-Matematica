@@ -1,0 +1,424 @@
+<html>
+<head>
+	<script src="desenharGrafico.js"></script> 
+	<script src="falar.js"></script>
+	<script src="ordinais.js"></script>
+
+	<script src='https://code.responsivevoice.org/responsivevoice.js'></script>	
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	
+	<link rel="stylesheet" type="text/css" href="../index.css?v=1.0">
+</head>
+<body onload="calcular();">
+	<script>
+		function muda()
+		{
+			document.getElementById("play").style.opacity = "0.5";
+		}
+		function muda2()
+		{
+			document.getElementById("play").style.opacity = "1";
+		}
+	</script>
+	<p id="question"></p>
+	  
+	<ul id="resultados">
+	</ul>
+
+	<a onmouseover='muda()' onmouseleave='muda2()' onclick='responsiveVoice.setDefaultVoice("Portuguese Male");responsiveVoice.speak(speak(raiz, n, z, zi, resultados[0], resultados[1], resultados[2], resultados[3]));'><img id="play" style='width:40px; height:auto;' src='play.png'/></a>
+	
+	<p>
+	  <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">Primeira Ajuda</button>
+	  <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2" onclick="ajuda()">Segunda Ajuda</button>
+	  <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample3">Terceira Ajuda</button>
+	</p>
+	<div class="row">
+	  <div class="col">
+		<div class="collapse multi-collapse" id="multiCollapseExample1">
+		  <div class="card card-body">
+		  <canvas id="myCanvas" width="800" height="600"></canvas>
+			<script>drawGraph(350, 320, 200, 200, -300, 300, -300, 300, 10, 10);</script>
+		  </div>
+		</div>
+	  </div>
+	  
+	  <div class="col">
+		<div class="collapse multi-collapse" id="multiCollapseExample2">
+		  <div class="card card-body">
+			<b>Ajuda 2</b>
+		  </div>
+		</div>
+	  </div>
+	  
+	  <div class="col">
+		<div class="collapse multi-collapse" id="multiCollapseExample3">
+		  <div class="card card-body">
+			<b>Ajuda 3</b>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	<script>
+		var alpha = [];
+		var x = [];
+		var y = [];
+		var sX;
+		var sY;
+		var certa;
+		var raiz;
+		var z; 
+		var zi;
+		var result;
+		var resultados; 
+
+		function criaOpcoes(tipo, num, dif)
+		{	
+			
+			if (tipo == "num")
+			{
+				num = num.toFixed(2);
+				resultados = [num];
+				
+				while (resultados.length < 4)
+				{
+					result = randomNM(num-dif, num+dif);
+					inserir(result.toFixed(2), resultados);
+				}
+				
+				resultados.sort();	
+								
+				for (i=0; i<4; i++)
+				{	
+					if (resultados[i] == num)
+						certa = i;				
+				}
+									
+				result = "<ul id='resultados'>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op1'><label id='l1'> <b> (A) </b> " + resultados[0] + "</label></li>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op2'><label id='l2'> <b> (B) </b> " + resultados[1] + "</label></li>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op3'><label id='l3'> <b> (C) </b> " + resultados[2] + "</label></li>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op4'><label id='l4'> <b> (D) </b> " + resultados[3] + "</label></li>";		
+				result += "<li><a id='hidden' hidden onclick='verificar()'><img id='check' style='width:40px; height:auto;' src='check.png'/></a></li></ul>";
+			}
+
+			if (tipo == "imagine")
+			{
+				var r = num[0];
+				var i = num[1];
+				
+				resultados = [];
+				
+				var certo;
+				
+				if (i < 0)
+					certo = r.toFixed(2) + " - " + (-i.toFixed(2)) + "i";
+				else
+				{					
+					certo = r.toFixed(2) + " + " + i.toFixed(2) + "i";
+				}
+				inserir(certo, resultados);										
+				
+				while (resultados.length < 4)
+				{
+					result_r = randomNM(r-dif, r+dif);
+					result_i = randomNM(i-dif, i+dif);
+					
+					if (result_i < 0)
+						result = result_r.toFixed(2) + " - " + (-result_i.toFixed(2)) + "i";
+					
+					else
+						result = result_r.toFixed(2) + " + " + result_i.toFixed(2) + "i";
+						
+					inserir(result, resultados);
+				}
+							
+				resultados.sort();	
+								
+				for (i=0; i<4; i++)
+				{	
+					if (resultados[i] == certo)
+						certa = i;				
+				}
+
+				result = "<ul id='resultados'>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op1'><label id='l1'> <b>(A)</b> " + resultados[0] + "</label></li>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op2'><label id='l2'> <b>(B)</b> " + resultados[1] + "</label></li>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op3'><label id='l3'> <b>(C)</b> " + resultados[2] + "</label></li>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op4'><label id='l4'> <b>(D)</b> " + resultados[3] + "</label></li>";		
+				result += "<li><a id='hidden' hidden onclick='verificar()'><img id='check' style='width:40px; height:auto;' src='check.png'/></a></li></ul>";
+				
+			}
+							
+			if (tipo == "vetor")
+			{
+				var divisao1, divisao2, divisao3;
+							
+				probabilidade_dividida = num[0] / num[1];
+				resultados = [];
+				inserir([num[0], num[1]], resultados);
+				
+				while (resultados.length < 5)
+				{
+					numerador = randomNeM(1,9);
+					denominador = randomNeM(1,9);
+					
+					while ((numerador / denominador > 1 ) || (numerador / denominador < 0))
+					{
+						numerador = randomNeM(1,9);
+						denominador = randomNeM(1,9);
+					}
+									
+					result = simplificaV([numerador, denominador]);	
+					inserir(result, resultados);						
+				}														
+				
+				var divisor1 = resultados[1];
+				var divisor2 = resultados[2];
+				var divisor3 = resultados[3];
+				
+				divisao1 = divisor1[0] / divisor1[1];
+				divisao2 = divisor2[0] / divisor2[1];
+				divisao3 = divisor3[0] / divisor3[1];
+				//probabilidade_dividida = resultados[0] / resultados[1];
+				
+				var divisoes = [probabilidade_dividida, divisao1, divisao2, divisao3];
+			
+				divisoes.sort();	
+				
+				// Here be dragons
+				
+				for (var i=0; i<4; i++)
+				{
+					for (j=0; j<4; j++)
+					{
+						vResultados = resultados[j];
+						if (divisoes[i] == (vResultados[0]/vResultados[1]))
+							divisoes[i] = resultados[j];
+					}
+				}			
+			
+				fracao1 = divisoes[0];
+				sup1 = fracao1[0]; 
+				sub1 = fracao1[1];
+
+				fracao2 = divisoes[1];
+				sup2 = fracao2[0]; 
+				sub2 = fracao2[1];
+				
+				fracao3 = divisoes[2];
+				sup3 = fracao3[0]; 
+				sub3 = fracao3[1];
+				
+				fracao4 = divisoes[3];
+				sup4 = fracao4[0]; 
+				sub4 = fracao4[1];
+				
+				resultT = "<ul id='resultado'>";
+				resultT += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op1'><label id='l1'> <b>(A)</b> <sup>" + sup1 + "</sup>/<sub>" + sub1 + "</sub></label></li>";
+				resultT += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op2'><label id='l2'> <b>(B)</b> <sup>" + sup2 + "</sup>/<sub>" + sub2 + "</sub></label></li>";
+				resultT += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op3'><label id='l3'> <b>(C)</b> <sup>" + sup3 + "</sup>/<sub>" + sub3 + "</sub></label></li>";
+				resultT += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op4'><label id='l4'> <b>(D)</b> <sup>" + sup4 + "</sup>/<sub>" + sub4 + "</sub></label></li>";		
+				resultT += "<li><a id='hidden' hidden onclick='verificar()'><img id='check' style='width:40px; height:auto;' src='check.png'/></a></li></ul>";
+				
+				document.getElementById("resultado").innerHTML = resultT;
+				
+				var probabilidade = quoc;
+				var prob1 = probabilidade[0];
+				var prob2 = probabilidade[1];
+						
+				for (i= 0; i<4; i++)
+				{
+					var divisao = divisoes[i];
+					var div1 = divisao[0];
+					var div2 = divisao[1];
+					if ((div1 == prob1) && (div2 == prob2))
+						certa = i;
+				}
+			}
+
+			return result;
+		}
+			
+		function verificar_nothidden()
+		{
+			document.getElementById("hidden").hidden = false;
+		}
+		
+		function inserir(n,v)
+		{
+			var pos = 0;
+			var encontrou = false;
+			
+			while (pos < v.length && !encontrou)
+			{
+				if (v[pos] == n)
+					encontrou = true;
+		
+				pos++;				
+			}
+			
+			if (!encontrou)
+				v[v.length] = n;
+				
+			return v;			
+		}
+		
+		function randomNM(n,m)
+		{
+			return Math.random() * (m-n) + n;
+		}
+		
+		function randomNeM(n, m)
+		{
+			return Math.floor(Math.random() * (m-n+1))+(n);
+		}
+		
+		function verificar() 
+		{			
+
+			document.getElementById("op1").disabled = true;
+			document.getElementById("op2").disabled = true;
+			document.getElementById("op3").disabled = true;
+			document.getElementById("op4").disabled = true;
+
+			if ((document.getElementById("op1").checked == true) && (certa == 0)) 
+				 document.getElementById("l1").style.color = "green";
+				 
+			else if ((document.getElementById("op2").checked == true) && (certa == 1)) 
+				document.getElementById("l2").style.color = "green";
+				
+			else if ((document.getElementById("op3").checked == true) && (certa == 2)) 
+				 document.getElementById("l3").style.color = "green";
+				
+			else if ((document.getElementById("op4").checked == true) && (certa == 3)) 
+				 document.getElementById("l4").style.color = "green";
+				 
+			else
+			{
+				var radios = document.getElementsByName("op");
+				var escolhido;
+				
+				for (i=0; i< radios.length;i++)
+				{
+					if (radios[i].checked)
+						escolhido = i;
+				}
+				
+				if (escolhido == 0)		
+					document.getElementById("l1").style.color = "red";
+				else if (escolhido == 1)
+					document.getElementById("l2").style.color = "red";
+				else if (escolhido == 2)
+					document.getElementById("l3").style.color = "red";
+				else if (escolhido == 3)
+					document.getElementById("l4").style.color = "red";
+				
+				if (certa == 0)  
+					document.getElementById("l1").style.color = "green";
+				else if (certa == 1) 
+					document.getElementById("l2").style.color = "green"; 
+				else if (certa == 2)
+					document.getElementById("l3").style.color = "green"; 
+				else if (certa == 3) 
+					document.getElementById("l4").style.color = "green";				 					 
+				
+			}
+		}
+	
+		Math.radians = function(degrees) {
+			return degrees * Math.PI / 180;
+		};
+			
+		function calcular()
+		{
+			var c=document.getElementById("myCanvas");
+			var ctx=c.getContext("2d");
+			
+			var PRECISAO = 2;
+			
+			//funcoes
+			
+			var rho = randomNeM(2,8);
+			var theta = randomNeM(0,90);
+			n = randomNeM(2,10); 
+			
+			var r = Math.pow(rho, 1/n);
+			
+			z = (rho * Math.cos(Math.radians(theta))).toFixed(PRECISAO); 
+			zi = (rho * Math.sin(Math.radians(theta))).toFixed(PRECISAO);
+			
+			for (var i=0; i<n; i++)
+			{
+				alpha[i] = (Math.radians(theta + i * 360))/n;
+				x[i] = r * Math.cos(alpha[i]);
+				y[i] = r * Math.sin(alpha[i]);
+				
+				console.log("A raiz " + i + " é " + x[i] + " + " + y[i] + "i");
+				
+				//desenhar raizes (pontos da figura)
+				ctx.beginPath();
+				ctx.arc(350+x[i]*sX,320-y[i]*sY,2,0,2*Math.PI);
+				ctx.fill();		
+			}
+			
+			//desenhar z
+			var x_z = 350+z*sX;
+			var y_z = 320-zi*sY;
+			
+			ctx.beginPath();
+			ctx.arc(x_z,y_z,2,0,2*Math.PI);
+			ctx.fill();	
+			
+			ctx.font = '12pt Poiret One';
+			ctx.fillStyle = 'black'; 
+			ctx.fillText(z + "+" + zi + "i", x_z+5, y_z);
+			
+			//desenhar figura
+				
+			for (var i=0; i<n; i++)
+			{		
+				ctx.beginPath();
+				ctx.moveTo(350+x[i]*sX, 320-y[i]*sY);
+				ctx.lineTo(350+x[i+1]*sX, 320-y[i+1]*sY);
+				ctx.stroke();
+			}	
+			
+			ctx.lineTo(350+x[0]*sX, 320-y[0]*sY);
+			ctx.stroke();
+			
+			//desenhar circulo
+			ctx.beginPath();
+			ctx.arc(350,320,r*sX,0,2*Math.PI);
+			ctx.stroke();
+			
+			raiz = randomNeM(1,4);	
+			
+			while (raiz > n) 
+				raiz = randomNeM(1,4);	
+				
+			document.getElementById("question").innerHTML = "Qual a " + raiz + " raiz de <sup>" + n + "</sup>&#x221A; de " + z + " + " +  zi + "i?";
+			
+			opcoes = criaOpcoes("imagine", [x[raiz-1], y[raiz-1]], 3);	
+			
+			document.getElementById("resultados").innerHTML = opcoes;
+			
+		}
+	</script>
+
+	<!-- <input type="button" onclick="showPap()"> -->
+	
+	<script>
+	    function showPap()
+		{     
+			console.log(parent.paptest += 1);
+		}
+	</script>
+</body>
+</html>

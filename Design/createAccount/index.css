@@ -1,0 +1,56 @@
+﻿:root{
+    --main-color: #4682B4;    
+}
+
+body {
+    background-image: url("backLogin.png"); 
+    background-size: 100% 100%;
+    background-repeat: none;
+    font-family: Quicksand;
+}
+
+nav {
+    box-shadow: 0px 1px 0px 0px var(--main-color);
+    background-color: white;
+}
+
+.form-control {
+	padding-right: 40px;
+	font-size: 16px;
+	font-family: Quicksand;
+}
+
+.login-box {
+    background-color: rgba(40, 171, 223, 0.3);
+    width: 450px;
+    height: 470px;
+    margin: 100px auto 0px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.iniciarSessao {
+    color: black;
+    text-align: center;
+}
+
+.iniciarSessao:hover {
+    color: #585858;
+}
+
+#butSubmit {
+    background-color: black;
+    color: white;
+}
+
+#title {
+    text-align: center;
+    font: bold 20px/45px Quicksand;
+    text-shadow: 1px 0px 1px white;
+}
+
+input {
+    /* margin-top: 30px; */
+    margin-left: 30px; 
+}
+

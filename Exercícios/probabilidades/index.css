@@ -1,0 +1,31 @@
+.botoes a {
+	background-color:#cccccc;
+	color:black;
+	padding:5px 5px;
+	text-decoration:none;
+	font-size: 16;
+	font-family: Poppins;
+	font-style: Sans-Serif;
+	width:100px;
+	font-weight:bold;
+	list-style: none;
+	border-radius: 8px;
+}
+
+.botoes a:hover, a:active{
+	background-color:#b3b3b3;
+	color: black;
+}
+
+.botoes ul, li {
+	display: inline;
+}
+
+body {
+	font-family: Poppins;
+}
+
+#check:hover {
+	opacity: 0.7;
+}
+		

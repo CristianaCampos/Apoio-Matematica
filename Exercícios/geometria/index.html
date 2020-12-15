@@ -1,0 +1,309 @@
+<html>
+<head>
+	<title> Geometria </title>
+	<script src='https://code.responsivevoice.org/responsivevoice.js'></script>	
+
+	<!-- bootstrap collapse -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	
+	<script src="falar.js"></script>
+
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../index.css?v=1.0">	
+</head>
+
+<body>
+	<script>
+		function muda()
+		{
+			document.getElementById("play").style.opacity = "0.5";
+		}
+		function muda2()
+		{
+			document.getElementById("play").style.opacity = "1";
+		}
+	</script>
+
+	<canvas id="canvas" width="1000" height="350"></canvas>
+	  <p>Qual o valor do comprimento do lado AB, arredondado às centésimas?</p>
+	  
+	<ul id="resultados">
+	</ul>
+	
+	<a onmouseover='muda()' onmouseleave='muda2()' onclick='responsiveVoice.setDefaultVoice("Portuguese Male");responsiveVoice.speak(speak(angA, angB, ladoA, resultados[0], resultados[1],resultados[2], resultados[3]));'><img id="play" style='width:40px; height:auto;' src='play.png'/></a>
+	
+	<p>
+	  <button class="btn btnAjuda" data-toggle="collapse" data-target="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">Primeira Ajuda</button>
+	  <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2" onclick="ajuda()">Segunda Ajuda</button>
+	  <button class="btn btnAjuda" type="button" data-toggle="collapse" data-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample3">Terceira Ajuda</button>
+	</p>
+
+	<div class="row">
+	  <div class="col">
+		<div class="collapse multi-collapse" id="multiCollapseExample1">
+		  <div class="card card-body">
+			<b>Ajuda 1</b>
+			<p>Tens de começar por calcular o ângulo C</p>
+			<p>angC = 180 - (angA + angB)</p>
+		  </div>
+		</div>
+	  </div>
+	  <div class="col">
+		<div class="collapse multi-collapse" id="multiCollapseExample2">
+		  <div class="card card-body">
+			<b>Ajuda 2</b>
+			<p>Agora tens de calcular a altura <i>h</i></p>
+			<p>h = ladoA x sin(angC)</p>
+		  </div>
+		</div>
+	  </div>
+	  <div class="col">
+		<div class="collapse multi-collapse" id="multiCollapseExample3">
+		  <div class="card card-body">
+			<b>Ajuda 3</b>
+			<p>Agora falta calcular a solução do lado AB</p>
+			<p>AB = h / sin(angB)</p>
+		  </div>
+		</div>
+	  </div>
+	</div>	
+	<script>
+		var certa;
+		var angA;
+		var angB;
+		var angC;
+		var ladoA;
+		var ladoB;
+		var ladoC; 
+		var h;
+		var x;
+		var y;
+		var factor = 25;
+		var result;
+		var resultados; 
+
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		ctx.font = "16px Poppins";
+		
+		function criaOpcoes(tipo, num, dif)
+		{			
+			if (tipo == "num")
+			{
+				num = num.toFixed(2);
+				resultados = [num];
+				
+				while (resultados.length < 4)
+				{
+					result = randomNM(ladoC-dif, ladoC+dif);
+					inserir(result.toFixed(2), resultados);
+				}
+				
+				resultados.sort();	
+								
+				for (i=0; i<4; i++)
+				{	
+					if (resultados[i] == num)
+						certa = i;				
+				}
+									
+				result = "<ul id='resultados'>";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op1'><label id='l1'><b> (A) </b> " + resultados[0] + " </label></li> ";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op2'><label id='l2'><b> (B) </b> " + resultados[1] + " </label></li> ";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op3'><label id='l3'><b> (C) </b> " + resultados[2] + " </label></li> ";
+				result += "<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op4'><label id='l4'><b> (D) </b> " + resultados[3] + " </label></li>";		
+				result += "<li><a id='hidden' hidden onclick='verificar()'><img id='check' style='width:40px; height:auto;' src='check.png'/></a></li></ul>";
+			}	
+			return result;
+		}
+	
+		function verificar_nothidden()
+		{
+			document.getElementById("hidden").hidden = false;
+		}
+		function inserir(n,v)
+		{
+			var pos = 0;
+			var encontrou = false;
+			
+			while (pos < v.length && !encontrou)
+			{
+				if (v[pos] == n)
+					encontrou = true;
+		
+				pos++;				
+			}
+			
+			if (!encontrou)
+				v[v.length] = n;
+				
+			return v;			
+		}
+		
+		
+		Math.radians = function(degrees) {
+			return degrees * Math.PI / 180;
+		};
+		
+		function randomNeM(n, m)
+		{
+			return Math.floor(Math.random() * (m-n+1))+(n);
+		}
+	
+		function randomNM(n,m)
+		{
+			return Math.random() * (m-n) + n;
+		}
+		
+		function ajuda()
+		{		
+			if (canvas.getContext)
+			{	
+				var x1 = x - ladoA * factor * Math.cos(Math.radians(angC));
+				var y1 = y - ladoA * factor * Math.sin(Math.radians(angC));
+				var y2 = y1 + h * factor;
+				var metade = (y2-y1)/2;
+				ctx.beginPath();
+				ctx.moveTo(x1,y1);	
+				ctx.lineTo(x1,y2);
+				ctx.stroke();
+				ctx.fillText("h", x1 + offsetX, y2 - metade);
+			} 			
+		} 
+		
+		function verificar() 
+		{			
+			document.getElementById("op1").disabled = true;
+			document.getElementById("op2").disabled = true;
+			document.getElementById("op3").disabled = true;
+			document.getElementById("op4").disabled = true;
+
+			if ((document.getElementById("op1").checked == true) && (certa == 0)) 
+				 document.getElementById("l1").style.color = "green";
+				 
+			else if ((document.getElementById("op2").checked == true) && (certa == 1)) 
+				document.getElementById("l2").style.color = "green";
+				
+			else if ((document.getElementById("op3").checked == true) && (certa == 2)) 
+				 document.getElementById("l3").style.color = "green";
+				
+			else if ((document.getElementById("op4").checked == true) && (certa == 3)) 
+				 document.getElementById("l4").style.color = "green";
+				 
+			else
+			{
+				var radios = document.getElementsByName("op");
+				var escolhido;
+				
+				for (i=0; i< radios.length;i++)
+				{
+					if (radios[i].checked)
+						escolhido = i;
+				}
+				
+				if (escolhido == 0)		
+					document.getElementById("l1").style.color = "red";
+				else if (escolhido == 1)
+					document.getElementById("l2").style.color = "red";
+				else if (escolhido == 2)
+					document.getElementById("l3").style.color = "red";
+				else if (escolhido == 3)
+					document.getElementById("l4").style.color = "red";
+				
+				if (certa == 0)  
+					document.getElementById("l1").style.color = "green";
+				else if (certa == 1) 
+					document.getElementById("l2").style.color = "green"; 
+				else if (certa == 2)
+					document.getElementById("l3").style.color = "green"; 
+				else if (certa == 3) 
+					document.getElementById("l4").style.color = "green";				 					 
+				
+			}
+		}		
+		
+		var offsetX = 4;
+	
+		angA = randomNeM(45, 90);	
+		angB = randomNeM(45, 90);
+		angC = 180-(angA+angB);
+		
+		ladoA = randomNeM(4, 13);
+		
+		ladoB = (Math.sin(Math.radians(angB))*ladoA)/Math.sin(Math.radians(angA));
+		
+		x = 400;
+		y = 250;		
+
+		if (canvas.getContext)
+		{		
+			ctx.beginPath();
+			ctx.moveTo(x,y);
+			var x1 = x - ladoA * factor * Math.cos(Math.radians(angC));
+			var y1 = y - ladoA * factor * Math.sin(Math.radians(angC));
+			ctx.lineTo(x1,y1);
+			ctx.stroke();
+			var x2 = x - ladoB * factor;
+			ctx.lineTo(x2, y);
+			ctx.stroke();
+			ctx.lineTo(x, y);
+			ctx.stroke();
+
+			var raio_arc = 15;
+			ctx.arc(x, y, raio_arc, Math.PI, Math.PI + Math.radians(angC));
+			ctx.stroke();
+			
+			ctx.moveTo(x2, y);
+			ctx.arc(x2, y, raio_arc, -Math.radians(angA), 0);
+			ctx.stroke();
+			
+			ctx.moveTo(x1, y1);
+			ctx.arc(x1, y1, raio_arc, Math.radians(angC), Math.radians(angC) + Math.radians(angB));
+			ctx.stroke();
+			
+			ctx.fillText(ladoA,(x+x1)/2 + offsetX,(y+y1)/2);
+			ctx.fillText("C", x + offsetX, y);
+			ctx.fillText("B", x1 + offsetX, y1);
+			ctx.fillText("A", x2 - offsetX - 8, y);
+			
+			var offsetAB = 30;
+			ctx.fillText("AB",(x1+x2)/2 - offsetAB,(y+y1)/2);
+
+			var offsetXC = 35;
+			var offsetYC = 4;
+
+			var offsetXB = 10;
+			var offsetYB = 35;
+
+			var offsetXA = 22;
+			var offsetYA = 7;
+			
+			ctx.fillText(angB+"º", x1 - offsetXB, y1 + offsetYB);
+			ctx.fillText(angA+"º", x2 + offsetXA, y - offsetYA);
+
+			/////// calculo do lado (solucao)
+
+			h = ladoA*Math.sin(Math.radians(angC));
+			ladoC = h/(Math.sin(Math.radians(angB)));
+						
+			opcoes = criaOpcoes("num", ladoC, 0.15);	
+			
+			document.getElementById("resultados").innerHTML = opcoes;
+		}
+		
+  </script>
+
+	<!-- <input type="button" onclick="showPap()"> -->
+
+	<script>
+		function showPap()
+		{     
+			console.log(parent.paptest += 1);
+		}
+	</script>
+</body>
+</html>
+

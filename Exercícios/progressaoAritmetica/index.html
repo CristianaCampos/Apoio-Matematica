@@ -1,0 +1,104 @@
+<html>
+<head>
+	<title>Progressão Aritmética</title>
+
+	<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../index.css?v=1.0">
+</head>
+
+<body onload="calcular()">
+
+	<div id="question"></div>
+	
+	<ul id='resultados'>
+		<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op1'><label id='l1'>Verdadeiro</label></li>
+		<li><input type='radio' onchange='verificar_nothidden();' name='op' id='op2'><label id='l2'>Falso</label></li>		
+		<li><a id='hidden' hidden onclick='verificar()'><img id='check' style='width:40px;' src='check.png'/></a></li>
+	</ul>
+	
+	<script>
+	
+		var a1, r, n, pertenceOUNao, perg;
+		
+		function randomNeM(n, m)
+		{
+			return Math.floor(Math.random() * (m-n+1))+(n);
+		}
+		
+		function verificar_nothidden()
+		{
+			document.getElementById("hidden").hidden = false;
+		}
+		
+		function verificar() 
+		{			
+			document.getElementById("op1").disabled = true;
+			document.getElementById("op2").disabled = true;
+			document.getElementById("op3").disabled = true;
+			document.getElementById("op4").disabled = true;
+
+			if ((document.getElementById("op2").checked == true) && (pertenceOUNao == 0)) 
+				 document.getElementById("l2").style.color = "green";
+				 
+			else if ((document.getElementById("op1").checked == true) && (pertenceOUNao == 1)) 
+				document.getElementById("l1").style.color = "green";
+				 
+			else
+			{
+				var radios = document.getElementsByName("op");
+				var escolhido;
+				
+				for (i=0; i< radios.length;i++)
+				{
+					if (radios[i].checked)
+						escolhido = i;
+				}
+				
+				if (escolhido == 0)		
+					document.getElementById("l1").style.color = "red";
+				else if (escolhido == 1)
+					document.getElementById("l2").style.color = "red";
+				
+				if (pertenceOUNao == 0)  
+					document.getElementById("l2").style.color = "green";
+				else if (pertenceOUNao == 1) 
+					document.getElementById("l1").style.color = "green"; 				 					 			
+			}
+		}
+		
+		function calcular()
+		{
+			a1 = randomNeM(-100, 100);
+			r = randomNeM(-5, 5);
+			n = randomNeM(-50, 50);
+			pertenceOUNao = randomNeM(0,1);
+			var perg;
+			
+			var termo = a1 + (n-1) * r;
+			
+			if (pertenceOUNao == 0) 
+				perg = randomNeM(termo-(r-1), termo+(r-1));
+			else if (pertenceOUNao == 1)
+				perg = termo;
+				
+			document.getElementById("question").innerHTML = "<p>Sabemos que o primeiro termo é " + a1 + " e que a razão é " + r + ".</p> <p>O termo " + perg + " pertence à sucessão?</p>";
+		}
+	</script>
+
+	<!-- <input type="button" onclick="showPap()"> -->
+	<script>
+		function showPap()
+		{     
+			console.log(parent.paptest += 1);
+		}
+	</script>
+	
+</body>
+</html>
